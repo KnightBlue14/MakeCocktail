@@ -23,6 +23,9 @@ class Spirit(Ingredient):
         self.abv = abv
         self.proof = self.abv*2
         self.unit = (self.abv/100)*self.volume/10
+    def IsNonAlc(self):
+        return True if self.abv == 0 else False
+
 
 class Mix(Ingredient):
     def __init__(self,cost,price,volume):
@@ -77,6 +80,7 @@ def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
     return Cocktail(Price,cost,vol)
 
 Vodka = Spirit(10,2.40,700,40)
+NonAlcVodka = Spirit(10,2.00,700,0)
 Peach_Schnapps = Spirit(8,2.40,700,37.5)
 Smirnoff = Spirit(11.49,3.20,700,40)
 Passoa = Spirit(9.49,2.60,700,17)
