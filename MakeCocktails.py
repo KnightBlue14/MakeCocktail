@@ -23,13 +23,20 @@ class Spirit(Ingredient):
         self.abv = abv
         self.proof = self.abv*2
         self.unit = (self.abv/100)*self.volume/10
+        self.unit_per = self.unit/self.shots
     def IsNonAlc(self):
         return True if self.abv == 0 else False
 
 
 class Mix(Ingredient):
-    def __init__(self,cost,price,volume):
+    def __init__(self,cost,price,volume,serving,syrup = None):
         super().__init__(cost,price,volume)
+        self.serving = serving
+        self.syrup = syrup
+        if syrup != None:
+            self.serving = serving/6
+        self.cost_per = cost/serving
+        self.profit = self.price - self.cost_per
 
 class Bottles:
     def __init__(self,number,vol,cost,price):
@@ -59,7 +66,7 @@ def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
     if Ice.fill == 'full' and Ice.type == 'normal':
         vol = vol * 0.5
     if Ice.fill == 'full' and Ice.type == 'shake' and Glass == Martiniglass:
-        vol = vol * 0.5
+        vol = vol * 0.8
     if Ice.fill == 'full' and Ice.type == 'crushed':
         vol = vol * 0.5
     cost = 0
@@ -107,9 +114,9 @@ TiaMaria = Spirit(11.49,3.20,700,20)
 OldMout = Bottles(12,500,16.99,4.00)
 Corona = Bottles(24,330,20.79,4.00)
 
-OJ = Mix(1.70,1.75,1000)
-PJ = Mix(1.70,1.75,1000)
-Lemonade = Mix(47.49,1.75,7000)
+OJ = Mix(1.70,1.75,1000,250)
+PJ = Mix(1.70,1.75,1000,250)
+Lemonade = Mix(47.49,1.75,7000,250,'syrup')
 
 Hurricane = Glass(590)
 Martiniglass = Glass(120)
@@ -123,5 +130,6 @@ SexonBeach = MakeCocktail({Vodka:1,Peach_Schnapps:1}, {OJ:0},Hurricane,6.50,Beac
 PornstarMartini = MakeCocktail({Smirnoff:(35/25),Passoa:0.5}, {PJ:4},Martiniglass,9,MartiniIce)
 GratefulDead = MakeCocktail({DeadMansFingersSpicedRum:1,PinGrapeliquer:1},{OJ:0,Lemonade:0},PineappleGlass,9,CrushedIce)
 print(GratefulDead.profit)
-print(Vodka.unit)
+print(Vodka.unit_per)
+print(Lemonade.profit)
 
