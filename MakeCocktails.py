@@ -3,9 +3,10 @@ class Ingredient:
         self.cost = cost
         self.price = price
         self.volume = volume
-        self.shots = int(self.volume/25)
+        self.shots = self.volume/25
         self.cost_per = self.cost/self.shots
-        self.profit = (self.shots*self.price)-self.cost
+        self.sum = self.shots*self.price
+        self.profit = self.sum-self.cost
         self.profit_per = self.profit/self.shots
 
 class Accessory():
