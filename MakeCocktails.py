@@ -1,5 +1,5 @@
 import csv
-import pandas
+import pandas as pd
 
 class Ingredient:
     def __init__(self,cost,price,volume):
@@ -12,8 +12,9 @@ class Ingredient:
         self.profit = self.sum-self.cost
         self.profit_per = self.profit/self.shots
 
-class Accessory():
-    def __init__(self):
+class Accessory:
+    def __init__(self,cost):
+        self.cost = cost
         pass
 
 class Glass:
@@ -91,10 +92,15 @@ def find_item(item,type):
             print('Item not found, please update')
         file.close
 
-#print(find_item('TiaMaria','Spirit'))
+csvspirit = pd.read_csv('Spirit.csv')
+for index, row in csvspirit.iterrows():
+    exec(f'{row["name"]} = Spirit({row["cost"]},{row["price"]},{row["volume"]},{row["abv"]})')
 
-#csvfile = pandas.read_csv('Spirit.csv')
-#print(csvfile)
+csvmix = pd.read_csv('Mix.csv')
+print(csvmix)
+#for index, row in csvmix.iterrows():
+    #exec(f'{row["name"]} = Spirit({row["cost"]},{row["price"]},{row["volume"]},{row["abv"]})')
+
 
 def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
     vol = calculate_volume_from_ice(Glass,Ice)
@@ -103,9 +109,13 @@ def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
     nonfillers = sum(v for v in mix_dict.values() if v != 0)
     vol_neg = []
     for i in spirit_dict:
-        list = find_item(i,'Spirit')
-        print(list)
-        eval(list[0]) == Spirit(float(list[1]),float(list[2]),int(list[3]),float(list[4]))
+        try:
+            i
+        except NameError:
+            print('Item not found, please update csv')
+            break
+        finally:
+            pass
         vol_neg.append(spirit_dict[i])
     spirits = sum(vol_neg)
     for key,value in spirit_dict.items():
@@ -118,30 +128,7 @@ def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
             cost += value*key.cost_per
     return Cocktail(Price,cost,vol)
 
-#Vodka = Spirit(10,2.40,700,40)
-NonAlcVodka = Spirit(10,2.00,700,0)
-#Peach_Schnapps = Spirit(8,2.40,700,37.5)
-Smirnoff = Spirit(11.49,3.20,700,40)
-Passoa = Spirit(9.49,2.60,700,17)
-GreyGoose = Spirit(28.49,4.00,700,40)
-BacardiWhite = Spirit(13.99,3.60,700,40)
-DeadMansFingersSpicedRum = Spirit(14.49,4.00,700, 37.5)
-PinGrapeliquer = Spirit(11.99,3.20,500,20)
-Limoncello = Spirit(11.99,3.00,700,27)
-Baileys = Spirit(10.99,3.60,700,17)
-Kahlua = Spirit(11.99,4.00,700,20)
-Absolut = Spirit(12.99,4.00,700,40)
-Hendricks = Spirit(24.49,4.00,700,41.4)
-BacardiWhiteLarge = Spirit(30.99,3.60,1500,40)
-BombaySapphire = Spirit(15.69,3.80,700,40)
-PatronTequila = Spirit(35.99,4.00,700,40)
-JoseCuervo = Spirit(17.49,3.40,700,35)
-KrakenRum = Spirit(19.49,3.60,700,40)
-SambucaBlack = Spirit(14.99,3.50,700,38)
-SambucaWhite = Spirit(12.49,3.50,700,38)
-TequilaRose = Spirit(11.79,3.20,700,15)
-Midori = Spirit(13.79,2.80,700,27)
-TiaMaria = Spirit(11.49,3.20,700,20)
+
 
 OldMout = Bottles(12,500,16.99,4.00)
 Corona = Bottles(24,330,20.79,4.00)
@@ -154,10 +141,11 @@ Hurricane = Glass(590)
 Martiniglass = Glass(120)
 PineappleGlass = Glass(520)
 
-BeachIce = Ice('normal','full')
+NormalIce = Ice('normal','full')
 MartiniIce = Ice('normal','shake')
 CrushedIce = Ice('crushed','full')
 
-SexonBeach = MakeCocktail({'Vodka':1,'Peach_Schnapps':1}, {OJ:0},Hurricane,6.50,BeachIce)
+SexonBeach = MakeCocktail({Vodka:1,Peach_Schnapps:1}, {OJ:0},Hurricane,6.50,NormalIce)
 #PornstarMartini = MakeCocktail({Smirnoff:(35/25),Passoa:0.5}, {PJ:4},Martiniglass,9,MartiniIce)
 #GratefulDead = MakeCocktail({DeadMansFingersSpicedRum:1,PinGrapeliquer:1},{OJ:0,Lemonade:0},PineappleGlass,9,CrushedIce)
+print(SexonBeach.cost)

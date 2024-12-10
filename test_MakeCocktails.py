@@ -1,6 +1,6 @@
 import unittest
 
-from MakeCocktails import Ingredient, Spirit, Mix
+from MakeCocktails import Ingredient, Spirit, Mix, Cocktail
 
 class TestIngredient(unittest.TestCase):
     def test_ingredient(self):
