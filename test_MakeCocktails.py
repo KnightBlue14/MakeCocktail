@@ -11,7 +11,7 @@ class TestIngredient(unittest.TestCase):
         try:
             Ingred2 = Ingredient(10,5,0)
         except ZeroDivisionError as exc:
-            self.assertRaises(ZeroDivisionError)
+            self.assertRaises(ZeroDivisionError, 'If the volume is zero, it should result in division errors')
     def test_spirit(self):
         Spirit1 = Spirit(10,2.5,700,37.5)
         Spirit2 = Spirit(20,3,700,40)
