@@ -91,9 +91,9 @@ def find_item(item,type):
             print('Item not found, please update')
         file.close
 
-print(find_item('TiaMaria','Spirit'))
+#print(find_item('TiaMaria','Spirit'))
 
-csvfile = pandas.read_csv('Spirit.csv')
+#csvfile = pandas.read_csv('Spirit.csv')
 #print(csvfile)
 
 def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
@@ -103,6 +103,9 @@ def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
     nonfillers = sum(v for v in mix_dict.values() if v != 0)
     vol_neg = []
     for i in spirit_dict:
+        list = find_item(i,'Spirit')
+        print(list)
+        eval(list[0]) == Spirit(float(list[1]),float(list[2]),int(list[3]),float(list[4]))
         vol_neg.append(spirit_dict[i])
     spirits = sum(vol_neg)
     for key,value in spirit_dict.items():
@@ -115,9 +118,9 @@ def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
             cost += value*key.cost_per
     return Cocktail(Price,cost,vol)
 
-Vodka = Spirit(10,2.40,700,40)
+#Vodka = Spirit(10,2.40,700,40)
 NonAlcVodka = Spirit(10,2.00,700,0)
-Peach_Schnapps = Spirit(8,2.40,700,37.5)
+#Peach_Schnapps = Spirit(8,2.40,700,37.5)
 Smirnoff = Spirit(11.49,3.20,700,40)
 Passoa = Spirit(9.49,2.60,700,17)
 GreyGoose = Spirit(28.49,4.00,700,40)
@@ -155,6 +158,6 @@ BeachIce = Ice('normal','full')
 MartiniIce = Ice('normal','shake')
 CrushedIce = Ice('crushed','full')
 
-SexonBeach = MakeCocktail({Vodka:1,Peach_Schnapps:1}, {OJ:0},Hurricane,6.50,BeachIce)
-PornstarMartini = MakeCocktail({Smirnoff:(35/25),Passoa:0.5}, {PJ:4},Martiniglass,9,MartiniIce)
-GratefulDead = MakeCocktail({DeadMansFingersSpicedRum:1,PinGrapeliquer:1},{OJ:0,Lemonade:0},PineappleGlass,9,CrushedIce)
+SexonBeach = MakeCocktail({'Vodka':1,'Peach_Schnapps':1}, {OJ:0},Hurricane,6.50,BeachIce)
+#PornstarMartini = MakeCocktail({Smirnoff:(35/25),Passoa:0.5}, {PJ:4},Martiniglass,9,MartiniIce)
+#GratefulDead = MakeCocktail({DeadMansFingersSpicedRum:1,PinGrapeliquer:1},{OJ:0,Lemonade:0},PineappleGlass,9,CrushedIce)
