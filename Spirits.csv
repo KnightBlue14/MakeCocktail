@@ -1,0 +1,25 @@
+name,cost,price,volume,abv
+Vodka,10,2.40,700,40
+NonAlcVodka,10,2,700,0
+Peach_Schnapps,8,2.40,700,37.5
+Smirnoff,11.49,3.20,700,40
+Passoa,9.49,2.60,700,17
+GreyGoose,28.49,4.00,700,40
+BacardiWhite,13.99,3.60,700,40
+DeadMansFingersSpicedRum = Spirit(14.49,4.00,700, 37.5)
+PinGrapeliquer,11.99,3.20,500,20
+Limoncello,11.99,3.00,700,27
+Baileys,10.99,3.60,700,17
+Kahlua,11.99,4.00,700,20
+Absolut,12.99,4.00,700,40
+Hendricks,24.49,4.00,700,41.4
+BacardiWhiteLarge,30.99,3.60,1500,40
+BombaySapphire,15.69,3.80,700,40
+PatronTequila,35.99,4.00,700,40
+JoseCuervo,17.49,3.40,700,35
+KrakenRum,19.49,3.60,700,40
+SambucaBlack,14.99,3.50,700,38
+SambucaWhite,12.49,3.50,700,38
+TequilaRose,11.79,3.20,700,15
+Midori,13.79,2.80,700,27
+TiaMaria,11.49,3.20,700,20
