@@ -1,3 +1,6 @@
+import csv
+import pandas
+
 class Ingredient:
     def __init__(self,cost,price,volume):
         self.cost = cost
@@ -61,8 +64,7 @@ class Cocktail():
         self.volume = volume
         self.profit = self.price - self.cost
 
-
-def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
+def calculate_volume_from_ice(Glass,Ice):
     vol = Glass.volume
     if Ice.fill == 'full' and Ice.type == 'normal':
         vol = vol * 0.5
@@ -70,6 +72,32 @@ def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
         vol = vol * 0.8
     if Ice.fill == 'full' and Ice.type == 'crushed':
         vol = vol * 0.5
+    return vol
+
+
+def find_item(item,type):
+    with open(f'{type}.csv', newline='') as file:
+        reader = csv.reader(file)
+        next(reader, None)
+        found = 0
+        rowlist = []
+        for row in reader:
+            if row[0] == f'{item}':
+                print(f"{item} found")
+                rowlist = row
+                return rowlist
+                found += 1
+        if found == 0:
+            print('Item not found, please update')
+        file.close
+
+print(find_item('TiaMaria','Spirit'))
+
+csvfile = pandas.read_csv('Spirit.csv')
+#print(csvfile)
+
+def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
+    vol = calculate_volume_from_ice(Glass,Ice)
     cost = 0
     fillers = sum(1 for v in mix_dict.values() if v == 0)
     nonfillers = sum(v for v in mix_dict.values() if v != 0)
