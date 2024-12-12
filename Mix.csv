@@ -1,4 +1,4 @@
 name,cost,price,volume,serving,syrup
-OJ,1.70,1.75,1000,250
-PJ,1.70,1.75,1000,250
-Lemonade,47.49,1.75,7000,250,'syrup'
+OJ,1.70,1.75,1000,250,False
+PJ,1.70,1.75,1000,250,False
+Lemonade,47.49,1.75,7000,250,True

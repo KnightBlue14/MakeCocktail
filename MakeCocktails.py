@@ -1,5 +1,9 @@
 import csv
 import pandas as pd
+import sys
+import tracemalloc
+
+tracemalloc.start()
 
 class Ingredient:
     def __init__(self,cost,price,volume):
@@ -65,17 +69,6 @@ class Cocktail():
         self.volume = volume
         self.profit = self.price - self.cost
 
-def calculate_volume_from_ice(Glass,Ice):
-    vol = Glass.volume
-    if Ice.fill == 'full' and Ice.type == 'normal':
-        vol = vol * 0.5
-    if Ice.fill == 'full' and Ice.type == 'shake' and Glass == Martiniglass:
-        vol = vol * 0.8
-    if Ice.fill == 'full' and Ice.type == 'crushed':
-        vol = vol * 0.5
-    return vol
-
-
 def find_item(item,type):
     with open(f'{type}.csv', newline='') as file:
         reader = csv.reader(file)
@@ -92,15 +85,29 @@ def find_item(item,type):
             print('Item not found, please update')
         file.close
 
+#Broken into individual sections rather than a single repeated function as the setup for each object is slightly different
+
 csvspirit = pd.read_csv('Spirit.csv')
 for index, row in csvspirit.iterrows():
     exec(f'{row["name"]} = Spirit({row["cost"]},{row["price"]},{row["volume"]},{row["abv"]})')
 
 csvmix = pd.read_csv('Mix.csv')
-print(csvmix)
-#for index, row in csvmix.iterrows():
-    #exec(f'{row["name"]} = Spirit({row["cost"]},{row["price"]},{row["volume"]},{row["abv"]})')
+for index, row in csvmix.iterrows():
+    exec(f'{row["name"]} = Mix({row["cost"]},{row["price"]},{row["volume"]},{row["serving"]})')
+    if row['syrup'] == False:
+        pass
+    else:
+        exec(f'{row["name"]}.syrup = True')
 
+def calculate_volume_from_ice(Glass,Ice):
+    vol = Glass.volume
+    if Ice.fill == 'full' and Ice.type == 'normal':
+        vol = vol * 0.5
+    if Ice.fill == 'full' and Ice.type == 'shake' and Glass == Martiniglass:
+        vol = vol * 0.8
+    if Ice.fill == 'full' and Ice.type == 'crushed':
+        vol = vol * 0.5
+    return vol
 
 def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
     vol = calculate_volume_from_ice(Glass,Ice)
@@ -133,10 +140,6 @@ def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
 OldMout = Bottles(12,500,16.99,4.00)
 Corona = Bottles(24,330,20.79,4.00)
 
-OJ = Mix(1.70,1.75,1000,250)
-PJ = Mix(1.70,1.75,1000,250)
-Lemonade = Mix(47.49,1.75,7000,250,'syrup')
-
 Hurricane = Glass(590)
 Martiniglass = Glass(120)
 PineappleGlass = Glass(520)
@@ -149,3 +152,6 @@ SexonBeach = MakeCocktail({Vodka:1,Peach_Schnapps:1}, {OJ:0},Hurricane,6.50,Norm
 #PornstarMartini = MakeCocktail({Smirnoff:(35/25),Passoa:0.5}, {PJ:4},Martiniglass,9,MartiniIce)
 #GratefulDead = MakeCocktail({DeadMansFingersSpicedRum:1,PinGrapeliquer:1},{OJ:0,Lemonade:0},PineappleGlass,9,CrushedIce)
 print(SexonBeach.cost)
+
+print(tracemalloc.get_traced_memory())
+tracemalloc.stop()
