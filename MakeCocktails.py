@@ -63,10 +63,11 @@ class Ice:
         self.fill = fill
 
 class Cocktail():
-    def __init__(self,price,cost,volume):
+    def __init__(self,price,cost,volume,units):
         self.price = price
         self.cost = cost
         self.volume = volume
+        self.units = units
         self.profit = self.price - self.cost
 
 def find_item(item,type):
@@ -99,6 +100,17 @@ for index, row in csvmix.iterrows():
     else:
         exec(f'{row["name"]}.syrup = True')
 
+#commented for now, keeps returning an error
+
+#csvglass = pd.read_csv('Glass.csv')
+#for index, row in csvglass.iterrows():
+#    exec(f'{row["name"]} = Glass(int({row["volume"]}))')
+
+
+csvbottle = pd.read_csv('Bottles.csv')
+for index, row in csvbottle.iterrows():
+    exec(f'{row["name"]} = Bottles({row["number"]},{row["volume"]},{row["cost"]},{row["price"]})')
+
 def calculate_volume_from_ice(Glass,Ice):
     vol = Glass.volume
     if Ice.fill == 'full' and Ice.type == 'normal':
@@ -115,6 +127,7 @@ def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
     fillers = sum(1 for v in mix_dict.values() if v == 0)
     nonfillers = sum(v for v in mix_dict.values() if v != 0)
     vol_neg = []
+    units = 0
     for i in spirit_dict:
         try:
             i
@@ -124,16 +137,17 @@ def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
         finally:
             pass
         vol_neg.append(spirit_dict[i])
+        units += i.unit_per*spirit_dict[i]
     spirits = sum(vol_neg)
     for key,value in spirit_dict.items():
         cost += key.cost_per*value
     for key,value in mix_dict.items():
         if value == 0:
-            mix_measure = (vol - spirits - nonfillers - (1 - 1/fillers))/25
+            mix_measure = (vol - spirits - nonfillers - (1 - 1/fillers))
             cost += key.cost_per*mix_measure
         elif value != 0:
             cost += value*key.cost_per
-    return Cocktail(Price,cost,vol)
+    return Cocktail(Price,cost,vol,units)
 
 
 
@@ -149,9 +163,9 @@ MartiniIce = Ice('normal','shake')
 CrushedIce = Ice('crushed','full')
 
 SexonBeach = MakeCocktail({Vodka:1,Peach_Schnapps:1}, {OJ:0},Hurricane,6.50,NormalIce)
-#PornstarMartini = MakeCocktail({Smirnoff:(35/25),Passoa:0.5}, {PJ:4},Martiniglass,9,MartiniIce)
+#PornstarMartini = MakeCocktail({Smirnoff:35/25,Passoa:12.5/25}, {PJ:4},Martiniglass,9,MartiniIce)
 #GratefulDead = MakeCocktail({DeadMansFingersSpicedRum:1,PinGrapeliquer:1},{OJ:0,Lemonade:0},PineappleGlass,9,CrushedIce)
 print(SexonBeach.cost)
-
+print(SexonBeach.units)
 print(tracemalloc.get_traced_memory())
 tracemalloc.stop()
