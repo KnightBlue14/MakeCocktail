@@ -22,7 +22,8 @@ class Accessory:
         pass
 
 class Glass:
-    def __init__(self,volume):
+    def __init__(self,cost,volume):
+        self.cost = cost
         self.volume = volume
         self.measures = self.volume/25
 
@@ -102,9 +103,9 @@ for index, row in csvmix.iterrows():
 
 #commented for now, keeps returning an error
 
-#csvglass = pd.read_csv('Glass.csv')
-#for index, row in csvglass.iterrows():
-#    exec(f'{row["name"]} = Glass(int({row["volume"]}))')
+csvglass = pd.read_csv('Glass.csv')
+for index, row in csvglass.iterrows():
+    exec(f'{row["name"]} = Glass({row["cost"]},{row["volume"]})')
 
 
 csvbottle = pd.read_csv('Bottles.csv')
@@ -154,9 +155,9 @@ def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
 OldMout = Bottles(12,500,16.99,4.00)
 Corona = Bottles(24,330,20.79,4.00)
 
-Hurricane = Glass(590)
-Martiniglass = Glass(120)
-PineappleGlass = Glass(520)
+#Hurricane = Glass(590)
+#Martiniglass = Glass(120)
+#PineappleGlass = Glass(520)
 
 NormalIce = Ice('normal','full')
 MartiniIce = Ice('normal','shake')
