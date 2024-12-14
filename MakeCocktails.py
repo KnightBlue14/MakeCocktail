@@ -101,12 +101,15 @@ for index, row in csvmix.iterrows():
     else:
         exec(f'{row["name"]}.syrup = True')
 
-#commented for now, keeps returning an error
+#fixed the issue, needed to have multiple properties, not just one
 
 csvglass = pd.read_csv('Glass.csv')
 for index, row in csvglass.iterrows():
     exec(f'{row["name"]} = Glass({row["cost"]},{row["volume"]})')
 
+csvice = pd.read_csv('Ice.csv')
+for index, row in csvice.iterrows():
+    exec(f'{row["name"]} = Ice({row["type"]},{row["fill"]})')
 
 csvbottle = pd.read_csv('Bottles.csv')
 for index, row in csvbottle.iterrows():
@@ -114,7 +117,7 @@ for index, row in csvbottle.iterrows():
 
 def calculate_volume_from_ice(Glass,Ice):
     vol = Glass.volume
-    if Ice.fill == 'full' and Ice.type == 'normal':
+    if Ice.fill == 'full' and Ice.type == 'cube':
         vol = vol * 0.5
     if Ice.fill == 'full' and Ice.type == 'shake' and Glass == Martiniglass:
         vol = vol * 0.8
@@ -149,19 +152,6 @@ def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
         elif value != 0:
             cost += value*key.cost_per
     return Cocktail(Price,cost,vol,units)
-
-
-
-OldMout = Bottles(12,500,16.99,4.00)
-Corona = Bottles(24,330,20.79,4.00)
-
-#Hurricane = Glass(590)
-#Martiniglass = Glass(120)
-#PineappleGlass = Glass(520)
-
-NormalIce = Ice('normal','full')
-MartiniIce = Ice('normal','shake')
-CrushedIce = Ice('crushed','full')
 
 SexonBeach = MakeCocktail({Vodka:1,Peach_Schnapps:1}, {OJ:0},Hurricane,6.50,NormalIce)
 #PornstarMartini = MakeCocktail({Smirnoff:35/25,Passoa:12.5/25}, {PJ:4},Martiniglass,9,MartiniIce)

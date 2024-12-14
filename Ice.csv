@@ -1,0 +1,4 @@
+name,type,fill
+NormalIce,'cube','full'
+MartiniIce,'cube','shake'
+CrushedIce,'crushed','full'
