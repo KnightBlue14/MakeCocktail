@@ -8,10 +8,8 @@ class TestIngredient(unittest.TestCase):
         self.assertEqual(Ingred1.shots, 2,'There are two standard shots')
         self.assertGreater(Ingred1.cost,Ingred1.sum,'The cost is greater than the total revenue')
     def test_exceptions(self):
-        try:
+        with self.assertRaises(ZeroDivisionError):
             Ingred2 = Ingredient(10,5,0)
-        except ZeroDivisionError as exc:
-            self.assertRaises(ZeroDivisionError, 'If the volume is zero, it should result in division errors')
     def test_spirit(self):
         Spirit1 = Spirit(10,2.5,700,37.5)
         Spirit2 = Spirit(20,3,700,40)
