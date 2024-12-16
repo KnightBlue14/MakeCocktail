@@ -47,6 +47,7 @@ class Mix(Ingredient):
             self.serving = serving/6
         self.cost_per = cost/serving
         self.profit = self.price - self.cost_per
+        self.cost_per_shot = self.cost/self.shots
 
 class Bottles:
     def __init__(self,number,vol,cost,price):
@@ -130,7 +131,7 @@ def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
     cost = 0
     fillers = sum(1 for v in mix_dict.values() if v == 0)
     nonfillers = sum(v for v in mix_dict.values() if v != 0)
-    vol_neg = []
+    vol_neg = 0
     units = 0
     for i in spirit_dict:
         try:
@@ -140,20 +141,19 @@ def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
             break
         finally:
             pass
-        vol_neg.append(spirit_dict[i])
+        vol_neg += spirit_dict[i]*25
         units += i.unit_per*spirit_dict[i]
-    spirits = sum(vol_neg)
     for key,value in spirit_dict.items():
         cost += key.cost_per*value
     for key,value in mix_dict.items():
         if value == 0:
-            mix_measure = (vol - spirits - nonfillers - (1 - 1/fillers))
-            cost += key.cost_per*mix_measure
+            mix_measure = (vol - vol_neg - nonfillers - (1 - 1/fillers))/25
+            cost += key.cost_per_shot*mix_measure
         elif value != 0:
-            cost += value*key.cost_per
+            cost += value*key.cost_per_shot
     return Cocktail(Price,cost,vol,units)
 
-SexonBeach = MakeCocktail({Vodka:1,Peach_Schnapps:1}, {OJ:0},Hurricane,6.50,NormalIce)
+SexonBeach = MakeCocktail({Vodka:1,PeachSchnapps:1}, {OJ:0},Hurricane,6.50,NormalIce)
 PornstarMartini = MakeCocktail({Smirnoff:35/25,Passoa:12.5/25}, {PJ:4},Martiniglass,9,MartiniIce)
 #GratefulDead = MakeCocktail({DeadMansFingersSpicedRum:1,PinGrapeliquer:1},{OJ:0,Lemonade:0},PineappleGlass,9,CrushedIce)
 print(SexonBeach.cost)

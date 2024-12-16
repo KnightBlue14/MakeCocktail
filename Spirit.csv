@@ -1,7 +1,7 @@
 name,cost,price,volume,abv
 Vodka,10,2.40,700,40
 NonAlcVodka,10,2,700,0
-Peach_Schnapps,8,2.40,700,37.5
+PeachSchnapps,8,2.40,700,37.5
 Smirnoff,11.49,3.20,700,40
 Passoa,9.49,2.60,700,17
 GreyGoose,28.49,4.00,700,40
