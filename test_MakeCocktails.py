@@ -10,6 +10,8 @@ class TestIngredient(unittest.TestCase):
     def test_exceptions_zero(self):
       with self.assertRaises(ZeroDivisionError): 
          Ingred2 = Ingredient(10,5,0)
+
+class TestSpirit(unittest.TestCase):
     def test_spirit(self):
         Spirit1 = Spirit(10,2.5,700,37.5)
         Spirit2 = Spirit(20,3,700,40)
@@ -19,9 +21,10 @@ class TestIngredient(unittest.TestCase):
     def test_NonAlc(self):
         SpiritNon1 = Spirit(5,5,700,0)  
         self.assertTrue(SpiritNon1.IsNonAlc)
+
+class TestMix(unittest.TestCase):
     def test_mix(self):
         Mix1 = Mix(2,1.5,1000,250)
-
 
 if __name__ == '__main__':
     unittest.main()
