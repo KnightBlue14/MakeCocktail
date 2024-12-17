@@ -43,11 +43,14 @@ class Mix(Ingredient):
         super().__init__(cost,price,volume)
         self.serving = serving
         self.syrup = syrup
-        if syrup != None:
-            self.serving = serving/6
         self.cost_per = cost/serving
         self.profit = self.price - self.cost_per
         self.cost_per_shot = self.cost/self.shots
+    def AdjustServings(self):
+        if self.syrup == 'Boxed':
+            self.serving = self.serving/6
+        elif self.syrup == 'Simple':
+            self.cost_per_shot = self.cost_per_shot/5
 
 class Bottles:
     def __init__(self,number,vol,cost,price):
@@ -99,8 +102,12 @@ for index, row in csvmix.iterrows():
     exec(f'{row["name"]} = Mix({row["cost"]},{row["price"]},{row["volume"]},{row["serving"]})')
     if row['syrup'] == False:
         pass
-    else:
-        exec(f'{row["name"]}.syrup = True')
+    elif row['syrup'] == 'Boxed':
+        exec(f'{row["name"]}.syrup = "Boxed"')
+    elif row['syrup'] == 'Simple':
+        exec(f'{row["name"]}.syrup = "Simple"')
+    exec(f'{row["name"]}.AdjustServings()')
+    
 
 #fixed the issue, needed to have multiple properties, not just one
 
@@ -130,7 +137,7 @@ def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
     vol = calculate_volume_from_ice(Glass,Ice)
     cost = 0
     fillers = sum(1 for v in mix_dict.values() if v == 0)
-    nonfillers = sum(v for v in mix_dict.values() if v != 0)
+    nonfillers = (sum(v for v in mix_dict.values() if v != 0))
     vol_neg = 0
     units = 0
     for i in spirit_dict:
@@ -141,22 +148,22 @@ def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
             break
         finally:
             pass
-        vol_neg += spirit_dict[i]*25
+        vol_neg += spirit_dict[i]
         units += i.unit_per*spirit_dict[i]
     for key,value in spirit_dict.items():
         cost += key.cost_per*value
     for key,value in mix_dict.items():
         if value == 0:
-            mix_measure = (vol - vol_neg - nonfillers - (1 - 1/fillers))/25
+            mix_measure = (vol/25 - vol_neg - nonfillers - (1 - 1/fillers))
             cost += key.cost_per_shot*mix_measure
         elif value != 0:
             cost += value*key.cost_per_shot
     return Cocktail(Price,cost,vol,units)
 
-SexonBeach = MakeCocktail({Vodka:1,PeachSchnapps:1}, {OJ:0},Hurricane,6.50,NormalIce)
+SexonBeach = MakeCocktail({Vodka:1,PeachSchnapps:1}, {OJ:0,Grenadine:1},Hurricane,6.50,NormalIce)
 PornstarMartini = MakeCocktail({Smirnoff:35/25,Passoa:12.5/25}, {PJ:4},Martiniglass,9,MartiniIce)
 #GratefulDead = MakeCocktail({DeadMansFingersSpicedRum:1,PinGrapeliquer:1},{OJ:0,Lemonade:0},PineappleGlass,9,CrushedIce)
 print(SexonBeach.cost)
-print(PornstarMartini.units)
+print(PornstarMartini.cost)
 print(tracemalloc.get_traced_memory())
 tracemalloc.stop()
