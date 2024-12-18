@@ -2,7 +2,7 @@
 This is a python script that generates cocktails from a list of given ingredients, along with properties that can be used to track a number of variables, including the cost of ingredients, how much alcohol is in the cocktail, and profit based on a given price.
 
 ## Description
-This project is based on my work at a bar, in which I mix and serve cocktails, using a variety of ingredients, including spirits, mixers, syrups, and many more. From time to time, I am able to get a look at catalogues, offering deals and discounts, which led me to wonder how far that caost is spread, hence the creation of this tool. Potentially, it could be used to help track costs for a cocktail in a business, or even for personal use. The listed prices are based on a number of sources, and will need to be updated to reflect your own options.
+This project is based on my work at a bar, in which I mix and serve cocktails, using a variety of ingredients, including spirits, mixers, syrups, and many more. From time to time, I am able to get a look at catalogues, offering deals and discounts, which led me to wonder how far that cost is spread, hence the creation of this tool. Potentially, it could be used to help track costs for a cocktail in a business, or even for personal use. The listed prices are based on a number of sources, and will need to be updated to reflect your own options.
 
 IMPORTANT NOTE -
 
