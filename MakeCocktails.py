@@ -45,6 +45,9 @@ class Mix(Ingredient):
     def AdjustServings(self):
         if self.syrup == 'Boxed':
             self.serving = self.serving/6
+            self.cost_per = self.cost/self.serving
+            self.profit = self.price - self.cost_per
+            self.cost_per_shot = self.cost/(self.volume/self.serving)
         elif self.syrup == 'Simple':
             self.cost_per_shot = self.cost/10
 
@@ -71,7 +74,7 @@ class Cocktail():
         self.units = units
         self.ice = Ice
         self.profit = float(f"{(self.price - self.cost):.2f}")
-        self.abv = self.units * 10
+        self.abv = float(f"{((self.units*10)/self.volume)*100:.1f}")
     def __str__(self):
         return f'Cost to make - £{self.cost} \nPrice sold - £{self.price} \nProfit - £{self.profit} \nABV - {self.abv} \nIce used - {self.ice.type}'
 
@@ -133,27 +136,29 @@ def calculate_volume_from_ice(Glass,Ice):
     return vol
 
 def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
-    vol = calculate_volume_from_ice(Glass,Ice)
+    volume = calculate_volume_from_ice(Glass,Ice)
     cost = 0
     vol_neg = 0
     units = 0
     fillers = sum(1 for v in mix_dict.values() if v == 0)
     nonfillers = (sum(v for v in mix_dict.values() if v != 0))
+    print(fillers,nonfillers)
     for i in spirit_dict:
         vol_neg += spirit_dict[i]
         units += i.unit_per*spirit_dict[i]
     for key,value in spirit_dict.items():
         cost += key.cost_per*value
-    vol = vol/25 - vol_neg - nonfillers
+    vol = volume/25 - vol_neg - nonfillers
     for key,value in mix_dict.items():
         if value == 0:
             mix_measure = vol/fillers
             cost += key.cost_per_shot*mix_measure
         elif value != 0:
             cost += value*key.cost_per_shot
-    return Cocktail(Price,cost,vol,units,Ice)
+    return Cocktail(Price,cost,volume,units,Ice)
 
 SexonBeach = MakeCocktail({Vodka:1,PeachSchnapps:1}, {OrangeJuice:0,Grenadine:1},Hurricane,6.50,NormalIce)
-PornstarMartini = MakeCocktail({Smirnoff:35/25,Passoa:12.5/25}, {PineappleJuice:4},Martiniglass,9,MartiniIce)
+PornstarMartini = MakeCocktail({Smirnoff:35/25,Passoa:12.5/25}, {PineappleJuice:4,Vanilla:1},Martiniglass,9,MartiniIce)
+Mojito = MakeCocktail({BacardiWhiteLarge:2},{Lemonade:2,OrangeJuice:2},TallRocksGlass,6.50,CrushedIce)
 
 print(SexonBeach)
