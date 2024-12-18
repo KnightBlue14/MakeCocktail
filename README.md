@@ -28,26 +28,26 @@ This is a testing suite for the main function, serving as a demonstration of wha
 ### MakeCocktails.py
 This is the primary file of this project. For full transparency, and to aid if any changes need to be made, I will go over it section by section, as well as point out some other assumptions made
 
-#### 1-73 - Classes
+#### 1-79 - Classes
 The classes serve to assign properties to objects, which are then used to perform calulations. The Ingredient class is used as the superclass, from which the Spirit and Mix
 classes inherit many properties. They then have additional functions for their own uses - for instance, Spirit has properties specific to alcoholic drinks, and Mix has a function to adjust serving sizes based upon it's type.
 
 For those unfamiliar, soft drinks such as lemonade or coke can be sold as syrups, which are then mixed with soda water. Some sources I found suggested that this would be done at a ratio of 5 parts soda to 1 part syrup, so the serving size is adjusted appropriatley. In addition, simple syrups such as Grenadine can be added to cocktails for flavour. A standard pump for a 700ml bottle will dispense 10ml, so a 'shot' for simple syrups is assumed to be 10ml.
 
-#### 75-89 - find_item
+#### 81-95 - find_item
 This is a function intended to search the csvs and find if an ingredient is present. If it is not present, then the cocktail cannot be generated. Currently, it is not used, as another function has rendered it redundant, but I have opted to leave it in as using it would be more efficient than what I currently have, I am just not currently able to implement it successfuly.
 
-#### 91 - 119 - Setting up instances
+#### 98 - 125 - Setting up instances
 These blocks of code iterate over each csv file, and generate instances based on each item. Ideally, this would only be done to ingredients listed in the cocktail recipe, but I have not yet been able to implement it. Instead, this setup generates every object, even if it is not used, resulting in much more ram usage. When I am able to work a solution, I wull update this accordingly. Additionaly, rather than a single function for all classes, I have split them into different blocks, as each one is set up differently, and the class used needs to be specified. This is also where servings for Mix objects are adjusted, as it needs to be done after the instances are generated.
 
-#### 122 - 130 - Calculating volume from ice
+#### 128 - 136 - Calculating volume from ice
 Here is where we start to apply our instances. In a cocktail glass, the total volume available is reduced depending on how much ice is used. This function serves to apply that reduction, depending on what ice is used on what glass. For instance, a hurricane glass is 590ml. Cocktails that use this glass usually call for being filled with ice, which I have assumed to take up half the volume. Therefore, the volume left will be 295ml, which is then applied in the next function.
 
 As for the Martini glass, this is based on my experience with the Pornstar Martini. While no ice is in the glass, the final product should have a foam layer on top, from shaking the ingredients. I have assumed this layer, plus some ice melting during mixing, to take up 20% of the total volume. 
 
 These amounts are not based on any direct measurement, so feel free to change it of you disagree. Also, it does not account for every potential combination - I intend to update this over time.
 
-#### 132 - 157 - Mixing the cocktail
+#### 138 - 158 - Mixing the cocktail
 Now all of the ingredients are brought together.
 
 To initialise the function, call it in this format -
