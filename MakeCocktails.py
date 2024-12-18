@@ -1,9 +1,5 @@
 import csv
 import pandas as pd
-import sys
-import tracemalloc
-
-tracemalloc.start()
 
 class Ingredient:
     def __init__(self,cost,price,volume):
@@ -50,7 +46,7 @@ class Mix(Ingredient):
         if self.syrup == 'Boxed':
             self.serving = self.serving/6
         elif self.syrup == 'Simple':
-            self.cost_per_shot = self.cost_per_shot/5
+            self.cost_per_shot = self.cost/10
 
 class Bottles:
     def __init__(self,number,vol,cost,price):
@@ -68,12 +64,16 @@ class Ice:
         self.fill = fill
 
 class Cocktail():
-    def __init__(self,price,cost,volume,units):
-        self.price = price
-        self.cost = cost
+    def __init__(self,price,cost,volume,units,Ice):
+        self.price = float(f"{price:.2f}")
+        self.cost = float(f"{cost:.2f}")
         self.volume = volume
         self.units = units
-        self.profit = self.price - self.cost
+        self.ice = Ice
+        self.profit = float(f"{(self.price - self.cost):.2f}")
+        self.abv = self.units * 10
+    def __str__(self):
+        return f'Cost to make - £{self.cost} \nPrice sold - £{self.price} \nProfit - £{self.profit} \nABV - {self.abv} \nIce used - {self.ice.type}'
 
 def find_item(item,type):
     with open(f'{type}.csv', newline='') as file:
@@ -91,6 +91,7 @@ def find_item(item,type):
             print('Item not found, please update')
         file.close
 
+
 #Broken into individual sections rather than a single repeated function as the setup for each object is slightly different
 
 csvspirit = pd.read_csv('Spirit.csv')
@@ -107,9 +108,6 @@ for index, row in csvmix.iterrows():
     elif row['syrup'] == 'Simple':
         exec(f'{row["name"]}.syrup = "Simple"')
     exec(f'{row["name"]}.AdjustServings()')
-    
-
-#fixed the issue, needed to have multiple properties, not just one
 
 csvglass = pd.read_csv('Glass.csv')
 for index, row in csvglass.iterrows():
@@ -123,9 +121,10 @@ csvbottle = pd.read_csv('Bottles.csv')
 for index, row in csvbottle.iterrows():
     exec(f'{row["name"]} = Bottles({row["number"]},{row["volume"]},{row["cost"]},{row["price"]})')
 
+
 def calculate_volume_from_ice(Glass,Ice):
     vol = Glass.volume
-    if Ice.fill == 'full' and Ice.type == 'cube':
+    if Ice.fill == 'full' and Ice.type == 'cubed':
         vol = vol * 0.5
     if Ice.fill == 'full' and Ice.type == 'shake' and Glass == Martiniglass:
         vol = vol * 0.8
@@ -136,34 +135,25 @@ def calculate_volume_from_ice(Glass,Ice):
 def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
     vol = calculate_volume_from_ice(Glass,Ice)
     cost = 0
-    fillers = sum(1 for v in mix_dict.values() if v == 0)
-    nonfillers = (sum(v for v in mix_dict.values() if v != 0))
     vol_neg = 0
     units = 0
+    fillers = sum(1 for v in mix_dict.values() if v == 0)
+    nonfillers = (sum(v for v in mix_dict.values() if v != 0))
     for i in spirit_dict:
-        try:
-            i
-        except NameError:
-            print('Item not found, please update csv')
-            break
-        finally:
-            pass
         vol_neg += spirit_dict[i]
         units += i.unit_per*spirit_dict[i]
     for key,value in spirit_dict.items():
         cost += key.cost_per*value
+    vol = vol/25 - vol_neg - nonfillers
     for key,value in mix_dict.items():
         if value == 0:
-            mix_measure = (vol/25 - vol_neg - nonfillers - (1 - 1/fillers))
+            mix_measure = vol/fillers
             cost += key.cost_per_shot*mix_measure
         elif value != 0:
             cost += value*key.cost_per_shot
-    return Cocktail(Price,cost,vol,units)
+    return Cocktail(Price,cost,vol,units,Ice)
 
-SexonBeach = MakeCocktail({Vodka:1,PeachSchnapps:1}, {OJ:0,Grenadine:1},Hurricane,6.50,NormalIce)
-PornstarMartini = MakeCocktail({Smirnoff:35/25,Passoa:12.5/25}, {PJ:4},Martiniglass,9,MartiniIce)
-#GratefulDead = MakeCocktail({DeadMansFingersSpicedRum:1,PinGrapeliquer:1},{OJ:0,Lemonade:0},PineappleGlass,9,CrushedIce)
-print(SexonBeach.cost)
-print(PornstarMartini.cost)
-print(tracemalloc.get_traced_memory())
-tracemalloc.stop()
+SexonBeach = MakeCocktail({Vodka:1,PeachSchnapps:1}, {OrangeJuice:0,Grenadine:1},Hurricane,6.50,NormalIce)
+PornstarMartini = MakeCocktail({Smirnoff:35/25,Passoa:12.5/25}, {PineappleJuice:4},Martiniglass,9,MartiniIce)
+
+print(SexonBeach)
