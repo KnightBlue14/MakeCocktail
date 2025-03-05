@@ -142,7 +142,6 @@ def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
     units = 0
     fillers = sum(1 for v in mix_dict.values() if v == 0)
     nonfillers = (sum(v for v in mix_dict.values() if v != 0))
-    print(fillers,nonfillers)
     for i in spirit_dict:
         vol_neg += spirit_dict[i]
         units += i.unit_per*spirit_dict[i]
@@ -160,4 +159,4 @@ def MakeCocktail(spirit_dict,mix_dict,Glass,Price,Ice):
 SexonBeach = MakeCocktail({Vodka:1,PeachSchnapps:1}, {OrangeJuice:0,Grenadine:1},Hurricane,6.50,NormalIce)
 PornstarMartini = MakeCocktail({Smirnoff:35/25,Passoa:12.5/25}, {PineappleJuice:4,Vanilla:1},Martiniglass,9,MartiniIce)
 
-print(SexonBeach)
+print(PornstarMartini)
