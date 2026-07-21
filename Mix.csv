@@ -1,7 +1,9 @@
 name,cost,price,volume,serving,syrup
 OrangeJuice,1.70,1.75,1000,250,False
 PineappleJuice,1.70,1.75,1000,250,False
+AppleJuice,1.70,1.75,1000,250,False
 Lemonade,47.49,1.75,7000,250,Boxed
 Coke,47.49,1.75,7000,250,Boxed
 Grenadine,2.75,0,250,5,Simple
 Vanilla,2.75,0,250,5,Simple
+PepsiMax,47.49,1.75,7000,250,Boxed
